@@ -65,7 +65,7 @@ webpackConfig.devServer = {
     //匹配代理的url
     '/api': {
       // 目标服务器地址
-      target:'http://47.112.14.54:7878',
+      target:'https://cstj.olcourt.cn/api',
       // target: 'http://120.78.223.114:8688',
     //   target: 'http://47.105.189.44:8780',
       //路径重写
@@ -77,7 +77,7 @@ webpackConfig.devServer = {
     },
     '/ws': {
       // target: 'http://120.78.223.114:8688/voice/ws.jhtml',
-      target: 'http://47.112.14.54:8688/voice/ws.jhtml',
+      target: 'https://cstj.olcourt.cn/api',
       changeOrigin: true,
       ws: true
     }

@@ -2,9 +2,9 @@
     <div class="header">
         <div class="room-logo">
             <!-- {{hallName}} -->
-            <img style="width: 75%;margin-left: 10px;" src="../../assets/img/roomLogo.png" alt="">
+            <img style="width: 18%;margin-left: 10px;" src="../../assets/img/roomLogo.jpg" alt="">
         </div>
-        <div class="room-title">议理堂在线调解</div>
+        <div class="room-title">全在线调解平台</div>
         <div class="mainInfo">当前主屏：{{ mainInfo.name }}</div>
         <div class="leave" @click="outRoom" style="color: #fff;">
             <!-- <img src="../../assets/img/leave.svg" alt="离开"> -->
@@ -141,6 +141,26 @@
             >该浏览器暂不支持文档浏览，您可以下载该文件进行查看:
                 <a :src="protocolUrl" rel="external nofollow">下载文档文件</a>
             </iframe>
+        </div>
+    </el-dialog>
+    <el-dialog title="编辑调解协议" width="780px" :visible.sync="dialogFormVisible2">
+        <el-form label-position="left" :model="form">
+          <el-form-item label="纠纷主要事实、争议事项：" :label-width="formLabelWidth">
+            <el-input type="textarea" v-model="protocol.fact" auto-complete="off"></el-input>
+          </el-form-item>
+          <el-form-item label="协议内容：" :label-width="formLabelWidth">
+            <el-input type="textarea" v-model="protocol.content" auto-complete="off"></el-input>
+          </el-form-item>
+          <el-form-item label="履行方式、时限：" :label-width="formLabelWidth">
+            <el-input type="textarea" v-model="protocol.typeAndTime" auto-complete="off"></el-input>
+          </el-form-item>
+          <!-- <el-form-item label="份数：" :label-width="formLabelWidth">
+            <el-input-number v-model="protocol.count" :min="1" :max="10"></el-input-number>
+          </el-form-item> -->
+        </el-form>
+        <div slot="footer" class="dialog-footer">
+          <el-button @click="dialogFormVisible2 = false">取 消</el-button>
+          <el-button :loading="protocolLoading" type="primary" @click="submitProtocol">确 定</el-button>
         </div>
     </el-dialog>
     <!-- <div class="right-bar" :class="(evidenceShow || workerShow || courtShow || logShow) ? 'show' : ''">

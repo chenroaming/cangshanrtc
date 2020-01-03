@@ -252,7 +252,7 @@ export class RecordRoom extends Vue {
     const picArr = this.eviList[index];
     for (const item of picArr.proofUrlSet){
       const obj = {
-        src:'https://mediate.ptnetwork001.com' + item.path,
+        src:'https://cstj.olcourt.cn' + item.path,
         // src:item.path,
       }
       this.eviListpic.push(obj);

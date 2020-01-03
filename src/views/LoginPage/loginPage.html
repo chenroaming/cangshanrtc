@@ -5,7 +5,7 @@
       <div class="form-wrap">
         <!-- TABS CONTENT -->
         <div class="tabs-content" v-show="!isLogin">
-          <div class="logo-box"></div>
+          <!-- <div class="logo-box"></div> -->
           <div id="login-tab-content" :class="userType == 'judge' ? 'active' : ''">  
             <div class="login-form">
               <div class="form-item">
@@ -36,7 +36,7 @@
     </div>
     <div class="wrapper">
       <header @keydown.enter="serachByCaseNo">
-        <input v-model="hallName" type="text" placeholder="请输入村名查询">
+        <input v-model="hallName" type="text" placeholder="请输入调解室查询">
         <div class="search-icon" @click="serachByCaseNo">
           <img src="../../assets/img/searchIcon.png" alt="搜索" />
         </div>

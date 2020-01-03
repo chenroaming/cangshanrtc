@@ -12,7 +12,7 @@ import { piliRTC } from '../../utils/pili'
 import { deviceManager } from 'pili-rtc-web'
 import { exportLog } from '../../api/export'
 import { getUserInfo } from '../../api/user'
-import { finish,createImg2,startMediate,endMediate,closeRoom,intoRoom,changePar,getFileName,getRecordId,getByRoomId,getMaxNo,getProofByRecordId,getProofImg,getProof } from '../../api/case'
+import { finish,createImg2,startMediate,endMediate,closeRoom,intoRoom,changePar,getFileName,getRecordId,getByRoomId,getMaxNo,getProofByRecordId,getProofImg,getProof,getProtocolParam,saveProParam,getProtocolParam2 } from '../../api/case'
 import { getEviNote } from '../../api/evidence'
 import RWS from '../../utils/rws'
 import swal from 'sweetalert2'
@@ -82,8 +82,9 @@ export class RoomPage extends Vue {
   show1: boolean = true
   windowIsshow: boolean = true
   dialogFormVisible: boolean = false
+  dialogFormVisible2: boolean = false
   joinPeople:boolean = false
-  formLabelWidth: string = '120px'
+  formLabelWidth: string = '186px'
   joinPeopleArr:Array<any> = [
     {type:'申请人',name:'zhangsan',id:'111'},
     {type:'被申请人',name:'wangwu',id:'222'},
@@ -137,6 +138,15 @@ export class RoomPage extends Vue {
   eviTitle:string = ''
   isOpen:boolean = false
   deg:number = 0
+  roomId2:string = ''
+  protocolId:string = ''
+  protocol:any = {
+    content:'',
+    fact:'',
+    typeAndTime:'',
+    count:''
+  }
+  protocolLoading:boolean = false
   @Watch('mainInfo')
   onChildChanged(val: any, oldVal: any) {
       console.log(val)
@@ -310,7 +320,7 @@ created () {
       this.eviListpic = [];
       for (const item of result.urls){
         const obj = {
-          src:'https://mediate.ptnetwork001.com' + item,
+          src:'https://cstj.olcourt.cn' + item,
         }
         this.eviListpic.push(obj);
       }
@@ -336,7 +346,7 @@ created () {
           })
           getProofImg(this.recordId).then(res => {
             if(res.data.state == 100){
-              this.eviQrcode = 'https://mediate.ptnetwork001.com/' + res.data.path;
+              this.eviQrcode = 'https://cstj.olcourt.cn/' + res.data.path;
             }
           })
         }else if(res.data.state == 101){
@@ -444,13 +454,27 @@ created () {
           return;
         }
         if(this.isOpen){
-          // window.location.href = 'WebOffice://|Officectrl|http://mediate.ptnetwork001.com/tartctest/edit.html?file='+fileName;//法院
-          window.open('https://mediate.ptnetwork001.com/uedit?roomId=' + res.data.roomId,'_blank');
+          // window.location.href = 'WebOffice://|Officectrl|http://cstj.olcourt.cn/tartctest/edit.html?file='+fileName;//法院
+          // window.open('https://cstj.olcourt.cn/uedit/index.html?roomId=' + res.data.roomId,'_blank');
+          if(this.protocolId){
+            getProtocolParam(this.protocolId).then(res => {
+              this.protocol.content = res.data.data.content;
+              this.protocol.fact = res.data.data.fact;
+              this.protocol.typeAndTime = res.data.data.typeAndTime;
+              // this.protocol.count = res.data.data.count;
+            })
+          }else{
+            getProtocolParam2().then(res => {
+              console.log(res.data);
+            })
+          }
+          this.roomId2 = res.data.roomId;
+          this.dialogFormVisible2 = true;
         }else{
-          // window.open('http://view.officeapps.live.com/op/view.aspx?src=http://mediate.ptnetwork001.com'+res.data.fileUrl);//议理堂司法局
-          // window.location.href = 'WebOffice://|Officectrl|http://mediate.ptnetwork001.com/tartctest/edit2.html?file='+res.data.fileUrl;//议理堂司法局
+          // window.open('http://view.officeapps.live.com/op/view.aspx?src=http://cstj.olcourt.cn'+res.data.fileUrl);//议理堂司法局
+          // window.location.href = 'WebOffice://|Officectrl|http://cstj.olcourt.cn/tartctest/edit2.html?file='+res.data.fileUrl;//议理堂司法局
           this.dialogVisible = true;
-          this.protocolUrl = 'https://view.officeapps.live.com/op/view.aspx?src=http://mediate.ptnetwork001.com' + res.data.fileUrl + '?random=' + Math.random();
+          this.protocolUrl = 'https://view.officeapps.live.com/op/view.aspx?src=https://cstj.olcourt.cn' + res.data.fileUrl + '?random=' + Math.random();
         }
         this.baseInfoShow = false;
       })
@@ -498,7 +522,7 @@ created () {
               })
               getProofImg(this.recordId).then(res => {
                 if(res.data.state == 100){
-                  this.eviQrcode = 'https://mediate.ptnetwork001.com/' + res.data.path;
+                  this.eviQrcode = 'https://cstj.olcourt.cn/' + res.data.path;
                 }
               })
             }else if(res.data.state == 101){
@@ -522,14 +546,14 @@ created () {
             if(res.data.state == 100){
               this.$swal({
                 title: '扫描二维码签名确认',
-                html: "<div><img  src='https://mediate.ptnetwork001.com/"+res.data.path+"' style='width:55%'></div>",
+                html: "<div><img  src='https://cstj.olcourt.cn/"+res.data.path+"' style='width:55%'></div>",
                 confirmButtonText: '好的',
                 allowOutsideClick: false,
               })
               // if(this.roleName == '法院' || this.roleName ==  '司法局'){
               //   this.$swal({
               //     title: '扫描二维码签名确认',
-              //     html: "<div><img  src='https://mediate.ptnetwork001.com/"+res.data.pathList[0]+"' style='width:55%'></div>",
+              //     html: "<div><img  src='https://cstj.olcourt.cn/"+res.data.pathList[0]+"' style='width:55%'></div>",
               //     confirmButtonText: '好的',
               //     allowOutsideClick: false,
               //   })
@@ -537,7 +561,7 @@ created () {
               // }
               // this.$swal({
               //   title: '扫描二维码签名确认',
-              //   html: "<div><p>申请人请扫描以下二维码</p><img  src='https://mediate.ptnetwork001.com/"+res.data.pathList[0]+"' style='width:55%'></div><div><p>被申请人请扫描以下二维码</p><img  src='https://mediate.ptnetwork001.com/"+res.data.pathList[1]+"' style='width:55%'></div>",
+              //   html: "<div><p>申请人请扫描以下二维码</p><img  src='https://cstj.olcourt.cn/"+res.data.pathList[0]+"' style='width:55%'></div><div><p>被申请人请扫描以下二维码</p><img  src='https://cstj.olcourt.cn/"+res.data.pathList[1]+"' style='width:55%'></div>",
               //   confirmButtonText: '好的',
               //   allowOutsideClick: false,
               // }) 
@@ -568,7 +592,7 @@ created () {
     }
     for (const item of picArr.proofUrlSet){
       const obj = {
-        src:'https://mediate.ptnetwork001.com' + item.path,
+        src:'https://cstj.olcourt.cn' + item.path,
       }
       this.eviListpic.push(obj);
     }
@@ -714,5 +738,29 @@ created () {
   CheckItem(e){
       console.log(e.target.checked)
       this.isCheck=e.target.checked
+  }
+
+  submitProtocol(){
+    // const data = {
+    //   content:this.protocol.content,
+    //   fact:this.protocol.fact,
+    //   typeAndTime:this.protocol.typeAndTime,
+    //   count:this.protocol.count
+    // }
+    this.protocolLoading = true;
+    saveProParam(this.protocol.content,this.protocol.fact,this.protocol.typeAndTime).then(res => {
+      this.protocolLoading = false;
+      if(res.data.state == 100){
+        this.dialogFormVisible2 = false;
+        this.protocolId = res.data.protocolId;
+        window.open('https://cstj.olcourt.cn/uedit/index.html?roomId=' + this.roomId2,'_blank');
+      }else if(res.data.state == 101){
+        this.$swal({
+          type:"error",
+          title:res.data.message
+        })
+      }
+    })
+    // window.open('https://cstj.olcourt.cn/uedit/index.html?roomId=' + res.data.roomId,'_blank');
   }
 }

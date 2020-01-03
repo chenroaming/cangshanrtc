@@ -16,7 +16,7 @@ const extractSass = new ExtractTextPlugin({
   disable: process.env.NODE_ENV === 'development'
 })
 
-webpackConfig.output.publicPath = '/tartctest/'
+webpackConfig.output.publicPath = '/xartc/'
 
 webpackConfig.module.rules = [...webpackConfig.module.rules,
 {

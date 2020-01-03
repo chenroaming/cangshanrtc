@@ -406,3 +406,52 @@ export function getProof (proofId) {
     params
   })
 }
+
+/**
+ * [获取调解协议要素]
+ * @param {string} caseNo [案号]
+ * @returns { state: number, message: string } [state:100 成功；101 失败]
+ */
+export function getProtocolParam (protocolId) {
+  const params = {
+    protocolId
+  }
+  return service({
+    url: '/mediate/protocol/getProtocolParam.jhtml',
+    method: 'get',
+    params
+  })
+}
+
+/**
+ * [获取调解协议要素2]
+ * @param {string} caseNo [案号]
+ * @returns { state: number, message: string } [state:100 成功；101 失败]
+ */
+export function getProtocolParam2 () {
+  return service({
+    url: '/mediate/protocol/getProtocolParam.jhtml',
+    method: 'get'
+  })
+}
+
+/**
+ * [保存调解协议要素]
+ * @param {string} caseNo [案号]
+ * @returns { state: number, message: string } [state:100 成功；101 失败]
+ */
+export function saveProParam (content,fact,typeAndTime) {
+  // const params = JSON.stringify({
+  //   mediateNo,pantList
+  // })
+  const params = {
+    content,
+    fact,
+    typeAndTime,
+  }
+  return service({
+    url: '/mediate/protocol/saveProParam.jhtml',
+    method: 'get',
+    params
+  })
+}
