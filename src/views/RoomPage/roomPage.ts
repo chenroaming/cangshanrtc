@@ -57,7 +57,7 @@ export class RoomPage extends Vue {
 
 
   dialogShow: boolean =false
-  isActive:any = '1'
+  isActive:any = '2'
   users: Array<any> = []
   evidenceShow: boolean = false
   workerShow: boolean = false

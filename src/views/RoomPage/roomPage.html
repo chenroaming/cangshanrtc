@@ -1,9 +1,8 @@
 <div class="room-content">
     <div class="header">
-        <div class="room-logo">
-            <!-- {{hallName}} -->
-            <img style="width: 125px;height:50px;margin-left: 10px;" src="../../assets/img/roomLogo.png" alt="">
-        </div>
+        <!-- <div class="room-logo">
+            <img style="width: 156px;height:71px;margin-left: 10px;" src="../../assets/img/roomLogo.png" alt="">
+        </div> -->
         <div class="room-title">金山警司联调中心</div>
         <div class="mainInfo">当前主屏：{{ mainInfo.name }}</div>
         <div class="leave" @click="outRoom" style="color: #fff;">
@@ -24,7 +23,7 @@
                 </el-dropdown>
             </div>
         </div>
-        <div class="end-court" style="top: 6px;right: 180px;width: 161px;">
+        <div class="end-court" style="right: 180px;width: 161px;">
             <span class="qianming" @click="getQRimg">
                 <img src="../../assets/img/qianming2.png" alt="">
                 <span style="position: absolute;">签名</span>
@@ -33,14 +32,14 @@
     <!-- <div class="room-time"> {{clock.date}} {{clock.time}} {{clock.week}}（北京时间）</div> -->
     </div>
     <div class="right-content">
+        <div class="right-content-down" :class="{active:isActive == '2'}" @click="choice('2')">
+            基础信息
+        </div>
         <div class="right-content-up" :class="{active:isActive == '3'}" @click="choice('3')">
             上传证据
         </div>
         <div class="right-content-middle" :class="{active:isActive == '1'}" @click="choice('1')">
             调解协议
-        </div>
-        <div class="right-content-down" :class="{active:isActive == '2'}" @click="choice('2')">
-            基础信息
         </div>
     </div>
     <div class="baseInfo-box" v-show="baseInfoShow">
@@ -70,7 +69,7 @@
         <div class="justiceBureau">
             <span>
                 <img src="../../assets/img/justiceBureau.png" alt="">
-                司法局<input :disabled="!isOpen" type="text" v-model="justiceBureau.name" placeholder="请输入司法局名称">
+                司法所<input :disabled="!isOpen" type="text" v-model="justiceBureau.name" placeholder="请输入司法所名称">
             </span>
         </div>
         <div style="margin-top: 15px;"><el-button :disabled="!isOpen" :loading="loading1" type="primary" @click="submit">提交</el-button></div>
@@ -297,5 +296,5 @@
         <el-button @click="joinPeople = false">取 消</el-button>
         <el-button type="primary" @click="joinPeople = false">确 定</el-button>
     </div>
-  </el-dialog> --> -->
+  </el-dialog> --> 
 </div>
