@@ -18,6 +18,7 @@ import RWS from '../../utils/rws'
 import swal from 'sweetalert2'
 import './roomPage.less'
 import { ElStep } from 'element-ui/types/step'
+import { userDetail } from '../../api/user'
 
 interface UserInfoShape {
   id: number,
@@ -59,6 +60,7 @@ export class RoomPage extends Vue {
   dialogShow: boolean =false
   isActive:any = '2'
   users: Array<any> = []
+  party: Array<any> = []
   evidenceShow: boolean = false
   workerShow: boolean = false
   courtShow: boolean = false
@@ -146,7 +148,11 @@ export class RoomPage extends Vue {
     typeAndTime:'',
     count:''
   }
+  userType:number = 0
+  userstreamId:string = ''
   protocolLoading:boolean = false
+  roleType:number = 0
+  allUser:Array<any> = []
   @Watch('mainInfo')
   onChildChanged(val: any, oldVal: any) {
       console.log(val)
@@ -174,33 +180,44 @@ created () {
     // this.timer = setInterval(() => {
     //   this.updateTime()
     // }, 1000)
-
     piliRTC.on('user-join', user => {
       console.log('user-join')
-      console.log(this.users)
-      console.log(this.userInfo)
       this.users.map((item, index) => {
         if (!item.published) this.users.splice(index, 1)
       })
     })
     piliRTC.on('user-publish', user => {
       console.log('user-publish')
-      this.users.push(user)
+      const hallId = window.localStorage.getItem('roomId');
+      userDetail(user.userId,hallId).then(res => {
+        if (res.data.state === 100) {
+          if(res.data.result.roleType == 3){
+            this.party.push(user);
+          }else{
+            this.users.push(user);
+          }
+        }
+      })
     })
     piliRTC.on('user-unpublish', user => {
       console.log('user-unpublish')
       this.users.map((item, index) => {
         if (item.userId === user.userId) this.users.splice(index, 1)
       })
+      this.party.map((item, index) => {
+        if (item.userId === user.userId) this.party.splice(index, 1)
+      })
     })
   }
   async mounted () {
     // 进入房间
-    
     getUserInfo().then(res => {
       this.isOpen = this.$route.params.isOpen ? true : false;
       this.roleName = res.data.roleName;
       this.setMainInfo({ name: res.data.result.username, roleName: this.roleName })
+      console.log(res.data);
+      this.roleType = res.data.roleType;
+      console.log(this.roleType);
       this.initWebsocketEvent();//webSocket初始化
       // if(this.roleName != '法院'){
       //   this.baseInfoShow = false;
@@ -259,10 +276,28 @@ created () {
           console.log(`无法获取摄像头数据，错误代码${e.name}`)
       }
     }
-    this.users = piliRTC.users
+    console.log(piliRTC.users);
+    const hallId = window.localStorage.getItem('roomId');
+    for(const item of piliRTC.users){
+      if(item.published){
+        userDetail(item.userId,hallId).then(res => {
+          if (res.data.state === 100) {
+            if(res.data.result.roleType == 3){
+              this.party.push(item);
+            }else{
+              this.users.push(item);
+            }
+          }
+        })
+      }
+    }
+    // this.users = piliRTC.users
     this.users.map((item, index) => {
       if (!item.published) this.users.splice(index, 1)
     })
+    // this.party.map((item, index) => {
+    //   if (!item.published) this.party.splice(index, 1)
+    // })
   }
   destroyed () {
     piliRTC.leaveRoom()
@@ -763,4 +798,16 @@ created () {
     })
     // window.open('https://cstj.olcourt.cn/uedit/index.html?roomId=' + res.data.roomId,'_blank');
   }
+  // receive(userInfo:number,userid:string){
+  //   this.userType = userInfo;
+  //   this.userstreamId = userid;
+  //   console.log(this.userType,this.userstreamId);
+  //   console.log(this.users);
+  //   for(let i = 0;i < this.users.length;i++){
+  //     if(this.users[i].userId == userid && userInfo == 3){
+  //       this.users.splice(i,1);
+  //       this.party.push(this.users[i]);
+  //     }
+  //   }
+  // }
 }

@@ -105,8 +105,12 @@
     </div>
     <MainPlayer ref="mainPlayer" />
     <div :class="userInfo.role === '法官' ? 'bigger remoteplayer-list' : 'remoteplayer-list' ">
-        <LocalPlayer ref="localPlayer" :stream="stream" />
+        <LocalPlayer ref="localPlayer" :stream="stream" v-if="roleType != 3" />
         <RemotePlayer v-for="(item, index) in users" :class=windowIsShowClass v-if="item.userId !== userId" :id="item.userId" :key="index" />
+    </div>
+    <div class="partyList">
+        <LocalPlayer ref="localPlayer" :stream="stream" v-if="roleType == 3" />
+        <RemotePlayer v-for="(item, index) in party" :class=windowIsShowClass v-if="item.userId !== userId" :id="item.userId" :key="index" />
     </div>
     <div class="pic-box" v-show="picShow">
         <div class="carousel-box">
