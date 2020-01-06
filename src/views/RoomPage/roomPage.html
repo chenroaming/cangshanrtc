@@ -66,12 +66,12 @@
         <div class="respondent-address">
             <span>地址<input :disabled="!isOpen" type="text" v-model="respondent.address" placeholder="请输入地址"></span>
         </div>
-        <div class="justiceBureau">
+        <!-- <div class="justiceBureau">
             <span>
                 <img src="../../assets/img/justiceBureau.png" alt="">
                 司法所<input :disabled="!isOpen" type="text" v-model="justiceBureau.name" placeholder="请输入司法所名称">
             </span>
-        </div>
+        </div> -->
         <div style="margin-top: 15px;"><el-button :disabled="!isOpen" :loading="loading1" type="primary" @click="submit">提交</el-button></div>
     </div>
     <div class="evi-box" v-show="eviShow">
