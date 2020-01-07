@@ -462,7 +462,7 @@ created () {
       if(!this.recordId && this.isOpen){
         this.$swal({
           type:"error",
-          title:"请先补全申请人/被申请人/司法局信息！"
+          title:"请先补全申请人/被申请人信息！"
         })
         return;
       }
