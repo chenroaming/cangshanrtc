@@ -135,6 +135,9 @@ export class LoginPage extends Vue {
   }
   hallName:string = ''
   nowPage:Number = 1
+  statusType:Array<any> = [
+    '未申请','已受理','已分发','已分配','调解中','待调解(弃用)','生成调解协议(待签字)','调解成功(已签字)','不受理'
+  ]
   mounted () {
     const loading = this.$loading({
       lock: true,
@@ -150,8 +153,8 @@ export class LoginPage extends Vue {
         getHallList(this.hallName,this.nowPage,6).then(res => {
           loading.close();
           if(res.data.state == 100){
-            this.totalPage = res.data.data.totalPages;
-            this.caseList2 = res.data.data.content;
+            this.totalPage = res.data.totalPages;
+            this.caseList2 = res.data.content;
           }
         })
       }else{
@@ -179,8 +182,8 @@ export class LoginPage extends Vue {
         getHallList(this.hallName,this.nowPage,6).then(res => {
           this.loading = false;
           console.log(res.data);
-          this.totalPage = res.data.data.totalPages;
-          this.caseList2 = res.data.data.content;
+          this.totalPage = res.data.totalPages;
+          this.caseList2 = res.data.content;
         })
       }else {
         this.$swal({
@@ -230,8 +233,8 @@ export class LoginPage extends Vue {
     });
     getHallList(this.hallName,this.nowPage,6).then(res => {
       loading.close();
-      this.totalPage = res.data.data.totalPages;
-      this.caseList2 = res.data.data.content;
+      this.totalPage = res.data.totalPages;
+      this.caseList2 = res.data.content;
     })
   }
 
@@ -304,8 +307,8 @@ export class LoginPage extends Vue {
     });
     getHallList(this.hallName,this.nowPage,6).then(res => {
       loading.close();
-      this.totalPage = res.data.data.totalPages;
-      this.caseList2 = res.data.data.content;
+      this.totalPage = res.data.totalPages;
+      this.caseList2 = res.data.content;
     })
   }
 

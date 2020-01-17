@@ -43,28 +43,28 @@
         </div>
     </div>
     <div class="baseInfo-box" v-show="baseInfoShow">
-        <p><el-input v-model="caseNo" :disabled="!isOpen" placeholder="请输入引调号"></el-input></p>
+        <!-- <p><el-input v-model="caseNo" :disabled="!isOpen" placeholder="请输入引调号"></el-input></p> -->
         <div class="baseInfo-title"><img src="../../assets/img/applicant.png" alt=""><span>申请人</span></div>
         <div class="applicant-name">
-            <span>姓名<input :disabled="!isOpen" type="text" v-model="applicant.name" placeholder="请输入姓名"></span>
-            <span>联系电话<input :disabled="!isOpen" type="text" v-model="applicant.phone" placeholder="请输入号码"></span>
+            <span>姓名<input disabled type="text" v-model="applicant.name" placeholder="请输入姓名"></span>
+            <span>联系电话<input disabled type="text" v-model="applicant.phone" placeholder="请输入号码"></span>
         </div>
         <div class="applicant-id">
-            <span>身份证<input :disabled="!isOpen" type="text" v-model="applicant.idCard" placeholder="请输入身份证号"></span>
+            <span>身份证<input disabled type="text" v-model="applicant.idCard" placeholder="请输入身份证号"></span>
         </div>
         <div class="applicant-address">
-            <span>地址<input :disabled="!isOpen" type="text" v-model="applicant.address" placeholder="请输入地址"></span>
+            <span>地址<input disabled type="text" v-model="applicant.address" placeholder="请输入地址"></span>
         </div>
         <div class="baseInfo-title"><img src="../../assets/img/respondent.png" alt=""><span>被申请人</span></div>
         <div class="respondent-name">
-            <span>姓名<input :disabled="!isOpen" type="text" v-model="respondent.name" placeholder="请输入姓名"></span>
-            <span>联系电话<input :disabled="!isOpen" type="text" v-model="respondent.phone" placeholder="请输入号码"></span>
+            <span>姓名<input disabled type="text" v-model="respondent.name" placeholder="请输入姓名"></span>
+            <span>联系电话<input disabled type="text" v-model="respondent.phone" placeholder="请输入号码"></span>
         </div>
         <div class="respondent-id">
-            <span>身份证<input :disabled="!isOpen" type="text" v-model="respondent.idCard" placeholder="请输入身份证号"></span>
+            <span>身份证<input disabled type="text" v-model="respondent.idCard" placeholder="请输入身份证号"></span>
         </div>
         <div class="respondent-address">
-            <span>地址<input :disabled="!isOpen" type="text" v-model="respondent.address" placeholder="请输入地址"></span>
+            <span>地址<input disabled type="text" v-model="respondent.address" placeholder="请输入地址"></span>
         </div>
         <!-- <div class="justiceBureau">
             <span>
@@ -72,7 +72,7 @@
                 司法所<input :disabled="!isOpen" type="text" v-model="justiceBureau.name" placeholder="请输入司法所名称">
             </span>
         </div> -->
-        <div style="margin-top: 15px;"><el-button :disabled="!isOpen" :loading="loading1" type="primary" @click="submit">提交</el-button></div>
+        <!-- <div style="margin-top: 15px;"><el-button :disabled="!isOpen" :loading="loading1" type="primary" @click="submit">提交</el-button></div> -->
     </div>
     <div class="evi-box" v-show="eviShow">
         <p style="text-align: left;height: 60px;line-height: 60px;font-weight: 700;font-size: 18px;">

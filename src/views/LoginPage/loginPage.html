@@ -45,11 +45,24 @@
       </header>
       <div class="container scrollStyle">
         <ul class="todo" id="todo">
-          <li v-for="(item, index) in caseList2" :key="index">
-            <span class="caseNo-wrapper" style="width:540px">{{ item.name }}</span>
+          <li>
+            <span class="caseNo-wrapper" style="width:462px">案号</span>
             <div class="case-state">
-              <div class="light" :class="item.mediate ? 'open' : 'disable' "></div>
-              <span>{{ item.mediate ? '正在调解' : '未调解' }}</span>
+              <!-- <div class="light" :class="statusType[item.process]"></div> -->
+              <span>状态</span>
+            </div>
+            <!-- <div class="join-room">
+              操作
+            </div> -->
+            <!-- <div style="margin-right: 45px;" class="join-room">
+              进入调解
+            </div> -->
+          </li>
+          <li v-for="(item, index) in caseList2" :key="index">
+            <span class="caseNo-wrapper" style="width:462px">{{ item.sqCaseNo }}</span>
+            <div class="case-state">
+              <!-- <div class="light" :class="statusType[item.process]"></div> -->
+              <span>{{ statusType[item.process-1] }}</span>
             </div>
             <div class="join-room" @click="getRecord(item.id)">
               调解记录

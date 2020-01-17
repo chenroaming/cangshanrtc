@@ -49,7 +49,7 @@ export class LocalPlayer extends Vue {
 //   }
 mounted () {
   getUserInfo().then(res => {
-    this.name = res.data.result.username;
+    this.name = res.data.result.name;
   })
 }
 @Watch('mainInfo')

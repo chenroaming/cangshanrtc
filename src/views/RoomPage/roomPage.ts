@@ -223,13 +223,13 @@ created () {
       //   this.baseInfoShow = false;
       //   return;
       // }
-      if(this.isOpen){
-        getMaxNo().then(res => {
-          if(res.data.state == 100){
-            this.caseNo = res.data.mediateNo;
-          }
-        })
-      }
+      // if(this.isOpen){
+      //   getMaxNo().then(res => {
+      //     if(res.data.state == 100){
+      //       this.caseNo = res.data.mediateNo;
+      //     }
+      //   })
+      // }
     })
     
     try {
@@ -355,42 +355,43 @@ created () {
       this.eviListpic = [];
       for (const item of result.urls){
         const obj = {
-          src:'https://cstj.olcourt.cn' + item,
+          src:'https://sstj.olcourt.cn' + item,
         }
         this.eviListpic.push(obj);
       }
       this.picShow = true;
       this.eviTitle = result.proofName;
       const hallId = window.localStorage.getItem('roomId');
-      getRecordId(hallId).then(res => {
+      getProofByRecordId(hallId).then(res => {
         if(res.data.state == 100){
-          this.recordId = res.data.recordId;
-          this.eviList = [];
-          getProofByRecordId(this.recordId).then(res => {
-            if(res.data.state == 100){
-              for (let i = 0;i < res.data.proofs.length;i++){
-                const obj = {
-                  No:'证据' + (i + 1),
-                  name:res.data.proofs[i].name,
-                  id:res.data.proofs[i].id,
-                  proofUrlSet:res.data.proofs[i].proofUrlSet
-                }
-                this.eviList.push(obj);
-              }
+          for (let i = 0;i < res.data.proofs.length;i++){
+            const obj = {
+              No:'证据' + (i + 1),
+              name:res.data.proofs[i].name,
+              id:res.data.proofs[i].id,
+              proofUrlSet:res.data.proofs[i].proofUrlSet
             }
-          })
-          getProofImg(this.recordId).then(res => {
-            if(res.data.state == 100){
-              this.eviQrcode = 'https://cstj.olcourt.cn/' + res.data.path;
-            }
-          })
-        }else if(res.data.state == 101){
-          this.$swal({
-            type:"error",
-            title:res.data.message
-          })
+            this.eviList.push(obj);
+          }
         }
       })
+      getProofImg(hallId).then(res => {
+        if(res.data.state == 100){
+          this.eviQrcode = 'https://sstj.olcourt.cn/' + res.data.path;
+        }
+      })
+      // getRecordId(hallId).then(res => {
+      //   if(res.data.state == 100){
+      //     this.recordId = res.data.recordId;
+      //     this.eviList = [];
+          
+      //   }else if(res.data.state == 101){
+      //     this.$swal({
+      //       type:"error",
+      //       title:res.data.message
+      //     })
+      //   }
+      // })
     }
   }
   sendInfo(){
@@ -432,41 +433,55 @@ created () {
     })
   }
   getPantId(){
-    getByRoomId().then(res => {
+    const hallId = window.localStorage.getItem('roomId');
+    console.log(hallId)
+    getByRoomId(hallId).then(res => {
       if(res.data.state == 100){
-        for (const item of res.data.pants1){
-          if(item.type == '1'){
-            this.justiceBureau.name = item.name ? item.name : '';
-            this.justiceBureau.pantId = item.id ? item.id :'';
-          }else if(item.type == '2'){
-            this.applicant.name = item.name ? item.name : '';
-            this.applicant.idCard = item.idCard ? item.idCard : '';
-            this.applicant.phone = item.phone ? item.phone : '';
-            this.applicant.pantId = item.id ? item.id : '';
-            this.applicant.address = item.address ? item.address : '';
-          }else if(item.type == '3'){
-            this.respondent.name = item.name ? item.name : '';
-            this.respondent.idCard = item.idCard ? item.idCard : '';
-            this.respondent.phone = item.phone ? item.phone : '';
-            this.respondent.pantId = item.id ? item.id : '';
-            this.respondent.address = item.address ? item.address : '';
-          }
-        }
-        this.caseNo = res.data.mediateNo;
+        const item = res.data;
+        this.applicant.name = item.litigants1[0].litigantName ? item.litigants1[0].litigantName : '';
+        this.applicant.idCard = item.litigants1[0].identityCard ? item.litigants1[0].identityCard : '';
+        this.applicant.phone = item.litigants1[0].litigantPhone ? item.litigants1[0].litigantPhone : '';
+        this.applicant.pantId = item.litigants1[0].id ? item.litigants1[0].id : '';
+        this.applicant.address = item.litigants1[0].address ? item.litigants1[0].address : '';
+        this.respondent.name = item.litigants2[0].litigantName? item.litigants2[0].litigantName : '';
+        this.respondent.idCard = item.litigants2[0].identityCard ? item.litigants2[0].identityCard : '';
+        this.respondent.phone = item.litigants2[0].litigantPhone ? item.litigants2[0].litigantPhone : '';
+        this.respondent.pantId = item.litigants2[0].id ? item.litigants2[0].id : '';
+        this.respondent.address = item.litigants2[0].address ? item.litigants2[0].address : '';
+        // for (const item of res.data.pants1){
+        //   if(item.type == '1'){
+        //     this.justiceBureau.name = item.name ? item.name : '';
+        //     this.justiceBureau.pantId = item.id ? item.id :'';
+        //   }else if(item.type == '2'){
+        //     this.applicant.name = item.name ? item.name : '';
+        //     this.applicant.idCard = item.idCard ? item.idCard : '';
+        //     this.applicant.phone = item.phone ? item.phone : '';
+        //     this.applicant.pantId = item.id ? item.id : '';
+        //     this.applicant.address = item.address ? item.address : '';
+        //   }else if(item.type == '3'){
+        //     this.respondent.name = item.name ? item.name : '';
+        //     this.respondent.idCard = item.idCard ? item.idCard : '';
+        //     this.respondent.phone = item.phone ? item.phone : '';
+        //     this.respondent.pantId = item.id ? item.id : '';
+        //     this.respondent.address = item.address ? item.address : '';
+        //   }
+        // }
+        // this.caseNo = res.data.mediateNo;
       }
     })
   }
   choice(id){
     this.isActive = id;
     if(this.isActive == '1'){
-      if(!this.recordId && this.isOpen){
-        this.$swal({
-          type:"error",
-          title:"请先补全申请人/被申请人信息！"
-        })
-        return;
-      }
-      getFileName().then(res => {
+      // if(!this.recordId && this.isOpen){
+      //   this.$swal({
+      //     type:"error",
+      //     title:"请先补全申请人/被申请人信息！"
+      //   })
+      //   return;
+      // }
+      const caseId = window.localStorage.getItem('roomId');
+      getFileName(caseId).then(res => {
         console.log(res.data);
         let fileName = '';
         if(res.data.state != 100){
@@ -476,11 +491,12 @@ created () {
           })
           return;
         }
-        if(res.data.have){
-          fileName = res.data.fileUrl;
-        }else{
-          fileName = res.data.fileUrl + 'new';
-        }
+        this.roomId2 = res.data.roomId;
+        // if(res.data.have){
+        //   fileName = res.data.fileUrl;
+        // }else{
+        //   fileName = res.data.fileUrl + 'new';
+        // }
         if(!res.data.have && !this.isOpen){
           this.$swal({
             type:"error",
@@ -489,27 +505,28 @@ created () {
           return;
         }
         if(this.isOpen){
+          getProtocolParam(caseId).then(res => {
+            this.protocol.content = res.data.data.agreement;
+            this.protocol.fact = res.data.data.fact;
+            this.protocol.typeAndTime = res.data.data.method;
+            // this.protocol.count = res.data.data.count;
+          })
           // window.location.href = 'WebOffice://|Officectrl|http://cstj.olcourt.cn/tartctest/edit.html?file='+fileName;//法院
           // window.open('https://cstj.olcourt.cn/uedit/index.html?roomId=' + res.data.roomId,'_blank');
-          if(this.protocolId){
-            getProtocolParam(this.protocolId).then(res => {
-              this.protocol.content = res.data.data.content;
-              this.protocol.fact = res.data.data.fact;
-              this.protocol.typeAndTime = res.data.data.typeAndTime;
-              // this.protocol.count = res.data.data.count;
-            })
-          }else{
-            getProtocolParam2().then(res => {
-              console.log(res.data);
-            })
-          }
-          this.roomId2 = res.data.roomId;
+          // if(this.protocolId){
+            
+          // }else{
+          //   getProtocolParam2().then(res => {
+          //     console.log(res.data);
+          //   })
+          // }
+          // this.roomId2 = res.data.roomId;
           this.dialogFormVisible2 = true;
         }else{
           // window.open('http://view.officeapps.live.com/op/view.aspx?src=http://cstj.olcourt.cn'+res.data.fileUrl);//议理堂司法局
           // window.location.href = 'WebOffice://|Officectrl|http://cstj.olcourt.cn/tartctest/edit2.html?file='+res.data.fileUrl;//议理堂司法局
           this.dialogVisible = true;
-          this.protocolUrl = 'https://view.officeapps.live.com/op/view.aspx?src=https://cstj.olcourt.cn' + res.data.fileUrl + '?random=' + Math.random();
+          this.protocolUrl = 'https://view.officeapps.live.com/op/view.aspx?src=https://sstj.olcourt.cn' + res.data.fileUrl + '?random=' + Math.random();
         }
         this.baseInfoShow = false;
       })
@@ -523,11 +540,13 @@ created () {
       return;
     }
     if(this.isActive == '2'){
-      if(this.recordId){
-        this.getPantId();
-      }else if(!this.isOpen){
-        this.getPantId();
-      }
+      console.log(111);
+      this.getPantId();
+      // if(this.recordId){
+      //   this.getPantId();
+      // }else if(!this.isOpen){
+      //   this.getPantId();
+      // }
       this.baseInfoShow = !this.baseInfoShow;
       this.eviShow = false;
       return;
@@ -536,37 +555,43 @@ created () {
         const hallId = window.localStorage.getItem('roomId');
         // const hallId = '2f61df55c18b5q7werqkpov41415';
         if(!this.eviShow){
-          getRecordId(hallId).then(res => {
+          this.eviShow = !this.eviShow;
+          this.baseInfoShow = false;
+          // this.recordId = res.data.recordId;
+          this.eviList = [];
+          getProofByRecordId(hallId).then(res => {
             if(res.data.state == 100){
-              this.eviShow = !this.eviShow;
-              this.baseInfoShow = false;
-              this.recordId = res.data.recordId;
-              this.eviList = [];
-              getProofByRecordId(this.recordId).then(res => {
-                if(res.data.state == 100){
-                  for (let i = 0;i < res.data.proofs.length;i++){
-                    const obj = {
-                      No:'证据' + (i + 1),
-                      name:res.data.proofs[i].name,
-                      id:res.data.proofs[i].id,
-                      proofUrlSet:res.data.proofs[i].proofUrlSet
-                    }
-                    this.eviList.push(obj);
-                  }
+              for (let i = 0;i < res.data.proofs.length;i++){
+                const obj = {
+                  No:'证据' + (i + 1),
+                  name:res.data.proofs[i].name,
+                  id:res.data.proofs[i].id,
+                  proofUrlSet:res.data.proofs[i].proofUrls
                 }
-              })
-              getProofImg(this.recordId).then(res => {
-                if(res.data.state == 100){
-                  this.eviQrcode = 'https://cstj.olcourt.cn/' + res.data.path;
-                }
-              })
-            }else if(res.data.state == 101){
-              this.$swal({
-                type:"error",
-                title:res.data.message
-              })
+                this.eviList.push(obj);
+              }
             }
           })
+          getProofImg(hallId).then(res => {
+            if(res.data.state == 100){
+              this.eviQrcode = 'https://sstj.olcourt.cn/' + res.data.path;
+            }
+          })
+        
+          // getRecordId(hallId).then(res => {
+          //   if(res.data.state == 100){
+          //     this.eviShow = !this.eviShow;
+          //     this.baseInfoShow = false;
+          //     this.recordId = res.data.recordId;
+          //     this.eviList = [];
+              
+          //   }else if(res.data.state == 101){
+          //     this.$swal({
+          //       type:"error",
+          //       title:res.data.message
+          //     })
+          //   }
+          // })
         }else{
           this.eviShow = !this.eviShow;
         }
@@ -574,60 +599,75 @@ created () {
   }
   getQRimg(){
       const hallId = window.localStorage.getItem('roomId');
-      getRecordId(hallId).then(res => {
+      createImg2(hallId).then(res => {
         if(res.data.state == 100){
-          this.recordId = res.data.recordId;
-          createImg2(this.recordId).then(res => {
-            if(res.data.state == 100){
-              this.$swal({
-                title: '扫描二维码签名确认',
-                html: "<div><img  src='https://cstj.olcourt.cn/"+res.data.path+"' style='width:55%'></div>",
-                confirmButtonText: '好的',
-                allowOutsideClick: false,
-              })
-              // if(this.roleName == '法院' || this.roleName ==  '司法局'){
-              //   this.$swal({
-              //     title: '扫描二维码签名确认',
-              //     html: "<div><img  src='https://cstj.olcourt.cn/"+res.data.pathList[0]+"' style='width:55%'></div>",
-              //     confirmButtonText: '好的',
-              //     allowOutsideClick: false,
-              //   })
-              //   return;
-              // }
-              // this.$swal({
-              //   title: '扫描二维码签名确认',
-              //   html: "<div><p>申请人请扫描以下二维码</p><img  src='https://cstj.olcourt.cn/"+res.data.pathList[0]+"' style='width:55%'></div><div><p>被申请人请扫描以下二维码</p><img  src='https://cstj.olcourt.cn/"+res.data.pathList[1]+"' style='width:55%'></div>",
-              //   confirmButtonText: '好的',
-              //   allowOutsideClick: false,
-              // }) 
-            }else if(res.data.state == 101){
-              this.$swal({
-                type:'error',
-                title:res.data.message
-              })
-            }
-          })
-        }else if(res.data.state == 101){
           this.$swal({
-            type:'error',
-            title:res.data.message
+            title: '扫描二维码签名确认',
+            html: "<div><img  src='https://sstj.olcourt.cn/"+res.data.path+"' style='width:55%'></div>",
+            confirmButtonText: '好的',
+            allowOutsideClick: false,
           })
+          return;
         }
+        this.$swal({
+          type:'error',
+          title:res.data.message
+        })
       })
+      // getRecordId(hallId).then(res => {
+      //   if(res.data.state == 100){
+      //     this.recordId = res.data.recordId;
+      //     createImg2(this.recordId).then(res => {
+      //       if(res.data.state == 100){
+      //         this.$swal({
+      //           title: '扫描二维码签名确认',
+      //           html: "<div><img  src='https://cstj.olcourt.cn/"+res.data.path+"' style='width:55%'></div>",
+      //           confirmButtonText: '好的',
+      //           allowOutsideClick: false,
+      //         })
+      //         // if(this.roleName == '法院' || this.roleName ==  '司法局'){
+      //         //   this.$swal({
+      //         //     title: '扫描二维码签名确认',
+      //         //     html: "<div><img  src='https://cstj.olcourt.cn/"+res.data.pathList[0]+"' style='width:55%'></div>",
+      //         //     confirmButtonText: '好的',
+      //         //     allowOutsideClick: false,
+      //         //   })
+      //         //   return;
+      //         // }
+      //         // this.$swal({
+      //         //   title: '扫描二维码签名确认',
+      //         //   html: "<div><p>申请人请扫描以下二维码</p><img  src='https://cstj.olcourt.cn/"+res.data.pathList[0]+"' style='width:55%'></div><div><p>被申请人请扫描以下二维码</p><img  src='https://cstj.olcourt.cn/"+res.data.pathList[1]+"' style='width:55%'></div>",
+      //         //   confirmButtonText: '好的',
+      //         //   allowOutsideClick: false,
+      //         // }) 
+      //       }else if(res.data.state == 101){
+      //         this.$swal({
+      //           type:'error',
+      //           title:res.data.message
+      //         })
+      //       }
+      //     })
+      //   }else if(res.data.state == 101){
+      //     this.$swal({
+      //       type:'error',
+      //       title:res.data.message
+      //     })
+      //   }
+      // })
       return;
   }
   watchEvi(index,No){
     console.log(this.eviList[index]);
     this.eviListpic = [];
     const picArr = this.eviList[index];
-    if(this.roleName == '法院' || this.roleName ==  '司法局'){
-      getProof(this.eviList[index].id).then(res => {
+    // if(this.roleName == '法院' || this.roleName ==  '司法局'){
+    //   getProof(this.eviList[index].id).then(res => {
 
-      })
-    }
+    //   })
+    // }
     for (const item of picArr.proofUrlSet){
       const obj = {
-        src:'https://cstj.olcourt.cn' + item.path,
+        src:'https://sstj.olcourt.cn' + item.path,
       }
       this.eviListpic.push(obj);
     }
@@ -782,13 +822,14 @@ created () {
     //   typeAndTime:this.protocol.typeAndTime,
     //   count:this.protocol.count
     // }
+    const caseId = window.localStorage.getItem('roomId');
     this.protocolLoading = true;
-    saveProParam(this.protocol.content,this.protocol.fact,this.protocol.typeAndTime).then(res => {
+    saveProParam(caseId,this.protocol.content,this.protocol.fact,this.protocol.typeAndTime).then(res => {
       this.protocolLoading = false;
       if(res.data.state == 100){
         this.dialogFormVisible2 = false;
         this.protocolId = res.data.protocolId;
-        window.open('https://cstj.olcourt.cn/uedit/index.html?roomId=' + this.roomId2,'_blank');
+        window.open('https://sstj.olcourt.cn/uedit/index.html?roomId=' + this.roomId2,'_blank');
       }else if(res.data.state == 101){
         this.$swal({
           type:"error",

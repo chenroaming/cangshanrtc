@@ -13,9 +13,9 @@
         </header>
         <div class="container2 scrollStyle">
           <p v-if="noRecord" class="noRecord">暂无调解记录</p>
-          <ul class="todo" id="todo" v-infinite-scroll="load" infinite-scroll-disabled="noMore" infinite-scroll-delay="500" infinite-scroll-immediate="false" style="overflow:auto;height: 460px;">
+          <ul class="todo" id="todo" style="overflow:auto;height: 460px;">
             <li v-for="(item, index) in caseList2" :key="index">
-              <span class="caseNo-wrapper" style="width:540px">{{ item.mediateNo }}</span>
+              <span class="caseNo-wrapper" style="width:540px">{{ item.name }}</span>
               <div class="join-room" @click="getRecord(item.id,index)">
                 调解记录
                 <img src="../../assets/img/arrow.png" :class="{'icon_arrowUp':nowIndex == index && isShow,'icon_arrowDown':nowIndex == index && !isShow}">

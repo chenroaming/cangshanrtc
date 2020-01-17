@@ -3,7 +3,7 @@ import { Getter, Action } from 'vuex-class'
 import { VueParticles } from '../../components/vue-particles'
 import { AtomSpinner } from 'epic-spinners'
 import { getUserInfo } from '../../api/user'
-import { getRecord1,getRecord2,downloadPro } from '../../api/case'
+import { getRecord1,getRecord2,downloadPro, getProtocolParam } from '../../api/case'
 
 import RWS from '../../utils/rws'
 
@@ -96,6 +96,7 @@ export class RecordRoom extends Vue {
   noMore:boolean = false
   locked:boolean = true
   noRecord:boolean = false
+  fileUrl:string = ''
   mounted () {
     this.hallId = window.localStorage.getItem('hallId');
     const loading = this.$loading({
@@ -120,15 +121,37 @@ export class RecordRoom extends Vue {
     })
     getRecord1(this.hallId,this.nowPage,7).then(res => {
       if(res.data.state == 100){
-        this.caseList2 = res.data.records.content;
-        if(res.data.records.content.length < 1){
-          this.noRecord = true;
-        }
-        this.nowPage = this.nowPage + 1;
-        if(res.data.records.totalPages == 1){
-          this.noMore = true;
-        }
+        // if(res.data.protocolList){
+        //   this.caseList2 = res.data.protocolList;
+        //   if(this.caseList2.length < 1){
+        //     this.noRecord = true;
+        //   }
+        // }else{
+        //   this.noRecord = true;
+        // }
+        // this.nowPage = this.nowPage + 1;
+        // if(res.data.records.totalPages == 1){
+        //   this.noMore = true;
+        // }
         // this.totalPage = res.data.records.totalPages;
+        this.applicant.name = res.data.litigants1[0].litigantName ? res.data.litigants1[0].litigantName : '';
+        this.applicant.id_card = res.data.litigants1[0].identityCard ? res.data.litigants1[0].identityCard : '';
+        this.applicant.phone = res.data.litigants1[0].litigantPhone ? res.data.litigants1[0].litigantPhone : '';
+        this.applicant.pantId = res.data.litigants1[0].id ? res.data.litigants1[0].id : '';
+        this.applicant.address = res.data.litigants1[0].address ? res.data.litigants1[0].address : '';
+        this.respondent.name = res.data.litigants2[0].litigantName? res.data.litigants2[0].litigantName : '';
+        this.respondent.id_card = res.data.litigants2[0].identityCard ? res.data.litigants2[0].identityCard : '';
+        this.respondent.phone = res.data.litigants2[0].litigantPhone ? res.data.litigants2[0].litigantPhone : '';
+        this.respondent.pantId = res.data.litigants2[0].id ? res.data.litigants2[0].id : '';
+        this.respondent.address = res.data.litigants2[0].address ? res.data.litigants2[0].address : '';
+        // this.caseNo = res.data.record.mediateNo;
+        this.mediationTime = res.data.protocolList[0].createDate ? this.time(res.data.protocolList[0].createDate) : '';
+        this.endTime = res.data.protocolList[0].modifyDate ? this.time(res.data.protocolList[0].modifyDate) : '';
+        this.caseList2 = res.data.protocolList;
+        this.eviList = res.data.proofs;
+        if(res.data.protocolList[0].signFileUrl){
+          this.fileUrl = 'https://sstj.olcourt.cn' + res.data.protocolList[0].signFileUrl;
+        }
       }
     })
   }
@@ -164,83 +187,88 @@ export class RecordRoom extends Vue {
     if(!this.isShow){
       return;
     }
-    this.nowId = id;
-    const loading = this.$loading({
-      lock: true,
-      text: 'Loading',
-      spinner: 'el-icon-loading',
-      background: 'rgba(255, 255, 255, 0.7)'
-    });
-    getRecord2(id).then(res => {
-      loading.close();
-      this.eviList = [];
-      if(res.data.state == 100){
-        for (const item of res.data.record.proofs){
-          if(item.enable){
-            this.eviList.push(item);
-          }
-        }
-        if(res.data.record.participants.length > 0){
-          this.caseNo = res.data.record.mediateNo;
-          this.mediationTime = res.data.record.startTime ? this.time(res.data.record.startTime) : '';
-          this.endTime = res.data.record.endTime ? this.time(res.data.record.endTime) : '';
-          for (const item of res.data.record.participants){
-            if(item.type == '2'){
-              this.applicant.name = item.name;
-              this.applicant.phone = item.phone;
-              this.applicant.address = item.address;
-              this.applicant.id_card = item.idCard;
-            }
-            if(item.type == '3'){
-              this.respondent.name = item.name;
-              this.respondent.phone = item.phone;
-              this.respondent.address = item.address;
-              this.respondent.id_card = item.idCard;
-            }
-            if(item.type == '1'){
-              this.justiceBureau = item.name;
-            }
-          }
-        }else{
-          this.applicant.name = '';
-          this.applicant.phone = '';
-          this.applicant.address = '';
-          this.applicant.id_card = '';
-          this.respondent.name = '';
-          this.respondent.phone = '';
-          this.respondent.address = '';
-          this.respondent.id_card = '';
-          this.caseNo = '';
-          this.mediationTime = '';
-          this.endTime = '';
-          this.justiceBureau = '';
-        }
-      }else if(res.data.state == 101){
-        this.$swal({
-          type: 'error',
-          title: res.data.message
-        })
-      }
-    })
+    
+    // this.nowId = id;
+    // const loading = this.$loading({
+    //   lock: true,
+    //   text: 'Loading',
+    //   spinner: 'el-icon-loading',
+    //   background: 'rgba(255, 255, 255, 0.7)'
+    // });
+    // getRecord2(id).then(res => {
+    //   loading.close();
+    //   this.eviList = [];
+    //   if(res.data.state == 100){
+    //     for (const item of res.data.record.proofs){
+    //       if(item.enable){
+    //         this.eviList.push(item);
+    //       }
+    //     }
+    //     if(res.data.record.participants.length > 0){
+    //       this.caseNo = res.data.record.mediateNo;
+    //       this.mediationTime = res.data.record.startTime ? this.time(res.data.record.startTime) : '';
+    //       this.endTime = res.data.record.endTime ? this.time(res.data.record.endTime) : '';
+    //       for (const item of res.data.record.participants){
+    //         if(item.type == '2'){
+    //           this.applicant.name = item.name;
+    //           this.applicant.phone = item.phone;
+    //           this.applicant.address = item.address;
+    //           this.applicant.id_card = item.idCard;
+    //         }
+    //         if(item.type == '3'){
+    //           this.respondent.name = item.name;
+    //           this.respondent.phone = item.phone;
+    //           this.respondent.address = item.address;
+    //           this.respondent.id_card = item.idCard;
+    //         }
+    //         if(item.type == '1'){
+    //           this.justiceBureau = item.name;
+    //         }
+    //       }
+    //     }else{
+    //       this.applicant.name = '';
+    //       this.applicant.phone = '';
+    //       this.applicant.address = '';
+    //       this.applicant.id_card = '';
+    //       this.respondent.name = '';
+    //       this.respondent.phone = '';
+    //       this.respondent.address = '';
+    //       this.respondent.id_card = '';
+    //       this.caseNo = '';
+    //       this.mediationTime = '';
+    //       this.endTime = '';
+    //       this.justiceBureau = '';
+    //     }
+    //   }else if(res.data.state == 101){
+    //     this.$swal({
+    //       type: 'error',
+    //       title: res.data.message
+    //     })
+    //   }
+    // })
     // this.baseInfoShow = true;
   }
 
   download(){
-    downloadPro(this.nowId).then(res => {
-      if(res.data.state == 100){
-        // window.open(res.data.fileUrl);
-        // window.open('https://view.officeapps.live.com/op/view.aspx?src='+res.data.fileUrl);
-        const link = document.createElement('a');
-        link.setAttribute("download", "");
-        link.href = res.data.fileUrl;
-        link.click();//点击直接下载文件
-      }else if(res.data.state == 101){
-        this.$swal({
-          type:'error',
-          title:res.data.message
-        })
-      }
-    })
+    // downloadPro(this.nowId).then(res => {
+    //   if(res.data.state == 100){
+    //     // window.open(res.data.fileUrl);
+    //     // window.open('https://view.officeapps.live.com/op/view.aspx?src='+res.data.fileUrl);
+    //     const link = document.createElement('a');
+    //     link.setAttribute("download", "");
+    //     link.href = res.data.fileUrl;
+    //     link.click();//点击直接下载文件
+    //   }else if(res.data.state == 101){
+    //     this.$swal({
+    //       type:'error',
+    //       title:res.data.message
+    //     })
+    //   }
+    // })
+    const link = document.createElement('a');
+    link.setAttribute("download", "");
+    link.href = this.fileUrl;
+    link.click();//点击直接下载文件
   }
 
   eviWatch(){
@@ -250,9 +278,9 @@ export class RecordRoom extends Vue {
   watchEvi(index,No){
     this.eviListpic = [];
     const picArr = this.eviList[index];
-    for (const item of picArr.proofUrlSet){
+    for (const item of picArr.proofUrls){
       const obj = {
-        src:'https://cstj.olcourt.cn' + item.path,
+        src:'https://sstj.olcourt.cn' + item.path,
         // src:item.path,
       }
       this.eviListpic.push(obj);

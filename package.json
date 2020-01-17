@@ -54,6 +54,7 @@
     "vuex-class": "^0.3.1"
   },
   "devDependencies": {
+    "@types/lodash": "^4.14.112",
     "@types/mocha": "~2.2.47",
     "@types/node": "^9.4.7",
     "@types/sinon": "^4.1.4",

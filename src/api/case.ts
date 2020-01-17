@@ -58,12 +58,12 @@ export function createImg () {
  * @param {string}
  * @returns { state: number, message: string } [state:100 成功；101 失败]
  */
-export function intoRoom (hallId) {
+export function intoRoom (caseId) {
   const params = {
-    hallId //房间id
+    caseId//房间id
   }
   return service({
-    url: '/mediate/intoRoom.jhtml',
+    url: '/court/room/intoRoom.jhtml',
     method: 'post',
     params
   })
@@ -81,7 +81,7 @@ export function closeRoom (recordId) {
     
   }
   return service({
-    url: '/mediate/closeRoom.jhtml',
+    url: '/court/room/closeRoom.jhtml',
     method: 'post',
     params
   })
@@ -126,19 +126,35 @@ export function endMediate () {
 }
 
 
+// /**
+//  * [查询法院/司法院/申请人/被申请人新]
+//  * @param {string} caseNo [案号]
+//  * @returns { state: number, message: string } [state:100 成功；101 失败]
+//  */
+// export function getByRoomId () {
+//   // const params = {
+//   //   roomId,
+//   //   type//0法院 1司法院 2申请人 3被申请人
+//   // }
+//   return service({
+//     url: '/participant/getByRoomId.jhtml',
+//     method: 'get',
+//   })
+// }
+
 /**
  * [查询法院/司法院/申请人/被申请人新]
  * @param {string} caseNo [案号]
  * @returns { state: number, message: string } [state:100 成功；101 失败]
  */
-export function getByRoomId () {
-  // const params = {
-  //   roomId,
-  //   type//0法院 1司法院 2申请人 3被申请人
-  // }
+export function getByRoomId (caseId) {
+  const params = {
+    caseId
+  }
   return service({
-    url: '/participant/getByRoomId.jhtml',
+    url: '/court/case/getLitInfoByCaseId.jhtml',
     method: 'get',
+    params
   })
 }
 
@@ -237,14 +253,14 @@ export function delParticipant (pantId) {
  * @param {string} caseNo [案号]
  * @returns { state: number, message: string } [state:100 成功；101 失败]
  */
-export function getRecord1 (hallId,pageNum,pageSize) {
+export function getRecord1 (caseId,pageNum,pageSize) {
   const params = {
-    hallId,
+    caseId,
     pageNum,
     pageSize
   }
   return service({
-    url: '/mediate/getRecord.jhtml',
+    url: '/court/protocol/getProtocolByCaseId.jhtml',
     method: 'get',
     params
   })
@@ -267,36 +283,38 @@ export function getRecord2 (recordId) {
 }
 
 
-/**
- * [查询文件名]
- * @param {string} caseNo [案号]
- * @returns { state: number, message: string } [state:100 成功；101 失败]
- */
-export function getFileName () {
-  // const params = {
-  //   recordId
-  // }
-  return service({
-    url: '/mediate/getProtocolName.jhtml',
-    method: 'get',
-  })
-}
-
-
 // /**
 //  * [查询文件名]
 //  * @param {string} caseNo [案号]
 //  * @returns { state: number, message: string } [state:100 成功；101 失败]
 //  */
-// export function getFileName () {
-//   // const params = {
-//   //   recordId
-//   // }
+// export function getFileName (caseId) {
+//   const params = {
+//     caseId
+//   }
 //   return service({
-//     url: '/mediate/protocol/getProtocolHtml.jhtml',
+//     url: '/court/protocol/getProtocolParam.jhtml',
 //     method: 'get',
+//     params
 //   })
 // }
+
+
+/**
+ * [查询文件名]
+ * @param {string} caseNo [案号]
+ * @returns { state: number, message: string } [state:100 成功；101 失败]
+ */
+export function getFileName (caseId) {
+  const params = {
+    caseId
+  }
+  return service({
+    url: 'court/protocol/getProtocolUrl.jhtml',
+    method: 'get',
+    params
+  })
+}
 
 /**
  * [获取记录ID]
@@ -315,16 +333,16 @@ export function getRecordId (hallId) {
 }
 
 /**
- * [获取二维码]
+ * [获取签名二维码]
  * @param {string} caseNo [案号]
  * @returns { state: number, message: string } [state:100 成功；101 失败]
  */
-export function createImg2 (recordId) {
+export function createImg2 (caseId) {
   const params = {
-    recordId
+    caseId
   }
   return service({
-    url: '/mediate/createImg.jhtml',
+    url: '/court/protocol/createImg.jhtml',
     method: 'post',
     params
   })
@@ -359,17 +377,33 @@ export function getMaxNo () {
 }
 
 
+// /**
+//  * [获取证据列表]
+//  * @param {string} caseNo [案号]
+//  * @returns { state: number, message: string } [state:100 成功；101 失败]
+//  */
+// export function getProofByRecordId (recordId) {
+//   const params = {
+//     recordId
+//   }
+//   return service({
+//     url: '/mediate/proof/getProofByRecordId.jhtml',
+//     method: 'get',
+//     params
+//   })
+// }
+
 /**
  * [获取证据列表]
  * @param {string} caseNo [案号]
  * @returns { state: number, message: string } [state:100 成功；101 失败]
  */
-export function getProofByRecordId (recordId) {
+export function getProofByRecordId (caseId) {
   const params = {
-    recordId
+    caseId
   }
   return service({
-    url: '/mediate/proof/getProofByRecordId.jhtml',
+    url: '/court/proof/getProofByCaseId.jhtml',
     method: 'get',
     params
   })
@@ -380,12 +414,12 @@ export function getProofByRecordId (recordId) {
  * @param {string} caseNo [案号]
  * @returns { state: number, message: string } [state:100 成功；101 失败]
  */
-export function getProofImg (recordId) {
+export function getProofImg (caseId) {
   const params = {
-    recordId
+    caseId
   }
   return service({
-    url: '/mediate/proof/getProofImg.jhtml',
+    url: '/court/proof/getProofImg.jhtml',
     method: 'post',
     params
   })
@@ -412,12 +446,12 @@ export function getProof (proofId) {
  * @param {string} caseNo [案号]
  * @returns { state: number, message: string } [state:100 成功；101 失败]
  */
-export function getProtocolParam (protocolId) {
+export function getProtocolParam (caseId) {
   const params = {
-    protocolId
+    caseId
   }
   return service({
-    url: '/mediate/protocol/getProtocolParam.jhtml',
+    url: '/court/protocol/getProtocolParam.jhtml',
     method: 'get',
     params
   })
@@ -440,17 +474,18 @@ export function getProtocolParam2 () {
  * @param {string} caseNo [案号]
  * @returns { state: number, message: string } [state:100 成功；101 失败]
  */
-export function saveProParam (content,fact,typeAndTime) {
+export function saveProParam (caseId,agreement,fact,method) {
   // const params = JSON.stringify({
   //   mediateNo,pantList
   // })
   const params = {
-    content,
+    caseId,
+    agreement,
     fact,
-    typeAndTime,
+    method,
   }
   return service({
-    url: '/mediate/protocol/saveProParam.jhtml',
+    url: '/court/protocol/saveProParam.jhtml',
     method: 'get',
     params
   })

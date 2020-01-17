@@ -174,16 +174,31 @@ export function logout () {
 }
 
 
+// /**
+//  * [查询议理堂新]
+//  * @returns { state: number, message: string } [state:100 成功；101 失败]
+//  */
+// export function getHallList (keyword,pageNum,pageSize) {
+//   const params = {
+//     keyword,pageNum,pageSize
+//   }
+//   return service({
+//     url: '/mediate/getHallList.jhtml',
+//     method: 'get',
+//     params
+//   })
+// }
+
 /**
  * [查询议理堂新]
  * @returns { state: number, message: string } [state:100 成功；101 失败]
  */
-export function getHallList (keyword,pageNum,pageSize) {
+export function getHallList (sqCaseNo,pageNum,pageSize) {
   const params = {
-    keyword,pageNum,pageSize
+    sqCaseNo,pageNum,pageSize
   }
   return service({
-    url: '/mediate/getHallList.jhtml',
+    url: '/court/case/getMediateLawCase.jhtml',
     method: 'get',
     params
   })
