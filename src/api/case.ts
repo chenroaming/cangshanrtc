@@ -403,7 +403,7 @@ export function getProofByRecordId (caseId) {
     caseId
   }
   return service({
-    url: '/court/proof/getProofByCaseId.jhtml',
+    url: '/court/evidence/getProofByCaseId.jhtml',
     method: 'get',
     params
   })
@@ -419,7 +419,7 @@ export function getProofImg (caseId) {
     caseId
   }
   return service({
-    url: '/court/proof/getProofImg.jhtml',
+    url: '/court/evidence/getProofImg.jhtml',
     method: 'post',
     params
   })

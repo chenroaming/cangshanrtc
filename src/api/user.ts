@@ -119,7 +119,7 @@ export function userDetail (adminId,hallId) {
   }
 
   return service({
-    url: '/mediate/getUserDetail.jhtml',
+    url: '/court/room/getUserDetail.jhtml',
     method: 'post',
     params
   })

@@ -214,10 +214,8 @@ created () {
     getUserInfo().then(res => {
       this.isOpen = this.$route.params.isOpen ? true : false;
       this.roleName = res.data.roleName;
-      this.setMainInfo({ name: res.data.result.username, roleName: this.roleName })
-      console.log(res.data);
+      this.setMainInfo({ name: res.data.result.name, roleName: this.roleName });
       this.roleType = res.data.roleType;
-      console.log(this.roleType);
       this.initWebsocketEvent();//webSocket初始化
       // if(this.roleName != '法院'){
       //   this.baseInfoShow = false;
@@ -367,9 +365,9 @@ created () {
           for (let i = 0;i < res.data.proofs.length;i++){
             const obj = {
               No:'证据' + (i + 1),
-              name:res.data.proofs[i].name,
+              name:res.data.proofs[i].evidenceName,
               id:res.data.proofs[i].id,
-              proofUrlSet:res.data.proofs[i].proofUrlSet
+              proofUrlSet:res.data.proofs[i].evidenceAttachments
             }
             this.eviList.push(obj);
           }
@@ -438,6 +436,7 @@ created () {
     getByRoomId(hallId).then(res => {
       if(res.data.state == 100){
         const item = res.data;
+        this.caseNo = item.sqCaseNo;
         this.applicant.name = item.litigants1[0].litigantName ? item.litigants1[0].litigantName : '';
         this.applicant.idCard = item.litigants1[0].identityCard ? item.litigants1[0].identityCard : '';
         this.applicant.phone = item.litigants1[0].litigantPhone ? item.litigants1[0].litigantPhone : '';
@@ -473,6 +472,8 @@ created () {
   choice(id){
     this.isActive = id;
     if(this.isActive == '1'){
+      this.baseInfoShow = false;
+      this.eviShow = false;
       // if(!this.recordId && this.isOpen){
       //   this.$swal({
       //     type:"error",
@@ -564,9 +565,9 @@ created () {
               for (let i = 0;i < res.data.proofs.length;i++){
                 const obj = {
                   No:'证据' + (i + 1),
-                  name:res.data.proofs[i].name,
+                  name:res.data.proofs[i].evidenceName,
                   id:res.data.proofs[i].id,
-                  proofUrlSet:res.data.proofs[i].proofUrls
+                  proofUrlSet:res.data.proofs[i].evidenceAttachments
                 }
                 this.eviList.push(obj);
               }
@@ -667,7 +668,7 @@ created () {
     // }
     for (const item of picArr.proofUrlSet){
       const obj = {
-        src:'https://sstj.olcourt.cn' + item.path,
+        src:'https://sstj.olcourt.cn' + item.url,
       }
       this.eviListpic.push(obj);
     }

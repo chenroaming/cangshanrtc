@@ -134,16 +134,24 @@ export class RecordRoom extends Vue {
         //   this.noMore = true;
         // }
         // this.totalPage = res.data.records.totalPages;
-        this.applicant.name = res.data.litigants1[0].litigantName ? res.data.litigants1[0].litigantName : '';
-        this.applicant.id_card = res.data.litigants1[0].identityCard ? res.data.litigants1[0].identityCard : '';
-        this.applicant.phone = res.data.litigants1[0].litigantPhone ? res.data.litigants1[0].litigantPhone : '';
-        this.applicant.pantId = res.data.litigants1[0].id ? res.data.litigants1[0].id : '';
-        this.applicant.address = res.data.litigants1[0].address ? res.data.litigants1[0].address : '';
-        this.respondent.name = res.data.litigants2[0].litigantName? res.data.litigants2[0].litigantName : '';
-        this.respondent.id_card = res.data.litigants2[0].identityCard ? res.data.litigants2[0].identityCard : '';
-        this.respondent.phone = res.data.litigants2[0].litigantPhone ? res.data.litigants2[0].litigantPhone : '';
-        this.respondent.pantId = res.data.litigants2[0].id ? res.data.litigants2[0].id : '';
-        this.respondent.address = res.data.litigants2[0].address ? res.data.litigants2[0].address : '';
+        if(!res.data.litigants1){
+          this.noRecord = true;
+          return;
+        }
+        if(res.data.litigants1.length > 0){
+          this.applicant.name = res.data.litigants1[0].litigantName ? res.data.litigants1[0].litigantName : '';
+          this.applicant.id_card = res.data.litigants1[0].identityCard ? res.data.litigants1[0].identityCard : '';
+          this.applicant.phone = res.data.litigants1[0].litigantPhone ? res.data.litigants1[0].litigantPhone : '';
+          this.applicant.pantId = res.data.litigants1[0].id ? res.data.litigants1[0].id : '';
+          this.applicant.address = res.data.litigants1[0].address ? res.data.litigants1[0].address : '';
+        }
+        if(res.data.litigants2.length > 0){
+          this.respondent.name = res.data.litigants2[0].litigantName? res.data.litigants2[0].litigantName : '';
+          this.respondent.id_card = res.data.litigants2[0].identityCard ? res.data.litigants2[0].identityCard : '';
+          this.respondent.phone = res.data.litigants2[0].litigantPhone ? res.data.litigants2[0].litigantPhone : '';
+          this.respondent.pantId = res.data.litigants2[0].id ? res.data.litigants2[0].id : '';
+          this.respondent.address = res.data.litigants2[0].address ? res.data.litigants2[0].address : '';
+        }
         // this.caseNo = res.data.record.mediateNo;
         this.mediationTime = res.data.protocolList[0].createDate ? this.time(res.data.protocolList[0].createDate) : '';
         this.endTime = res.data.protocolList[0].modifyDate ? this.time(res.data.protocolList[0].modifyDate) : '';
@@ -278,9 +286,9 @@ export class RecordRoom extends Vue {
   watchEvi(index,No){
     this.eviListpic = [];
     const picArr = this.eviList[index];
-    for (const item of picArr.proofUrls){
+    for (const item of picArr.evidenceAttachments){
       const obj = {
-        src:'https://sstj.olcourt.cn' + item.path,
+        src:'https://sstj.olcourt.cn' + item.url,
         // src:item.path,
       }
       this.eviListpic.push(obj);
