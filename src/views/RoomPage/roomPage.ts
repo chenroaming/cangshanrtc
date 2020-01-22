@@ -280,7 +280,7 @@ created () {
       if(item.published){
         userDetail(item.userId,hallId).then(res => {
           if (res.data.state === 100) {
-            if(res.data.result.roleType == 3){
+            if(res.data.result.roleType == 3 || res.data.result.name.indexOf('社区') != -1){
               this.party.push(item);
             }else{
               this.users.push(item);
@@ -306,32 +306,32 @@ created () {
     piliRTC.removeAllListeners('user-unpublish')
   }
 
-  async endCourt () {
-    this.$swal({
-      title: '确认结束庭审',
-      text: '结束庭审后案件将进入结案状态，无法再次开庭',
-      type: 'warning',
-      showCancelButton: true,
-      cancelButtonText: '取消',
-      cancelButtonColor: '#d33',
-      confirmButtonText: '结束'
-    }).then(res => {
-      if (res.value) {
-        finish().then(res => {
-          if (res.data.state === 100) {
-            this.$router.push({
-              name: 'loginPage'
-            })
-          } else {
-            this.swal({
-              type: 'error',
-              title: res.data.message
-            })
-          }
-        })
-      }
-    })
-  }
+  // async endCourt () {
+  //   this.$swal({
+  //     title: '确认结束庭审',
+  //     text: '结束庭审后案件将进入结案状态，无法再次开庭',
+  //     type: 'warning',
+  //     showCancelButton: true,
+  //     cancelButtonText: '取消',
+  //     cancelButtonColor: '#d33',
+  //     confirmButtonText: '结束'
+  //   }).then(res => {
+  //     if (res.value) {
+  //       finish().then(res => {
+  //         if (res.data.state === 100) {
+  //           this.$router.push({
+  //             name: 'loginPage'
+  //           })
+  //         } else {
+  //           this.swal({
+  //             type: 'error',
+  //             title: res.data.message
+  //           })
+  //         }
+  //       })
+  //     }
+  //   })
+  // }
   initWebsocketEvent () {
     console.log(this.websocket);
     this.websocket.onclose = () => {
