@@ -394,6 +394,11 @@
   resolved "https://registry.yarnpkg.com/@types/lodash/-/lodash-4.14.145.tgz#abcafe85788f1392c5d5a144142aaf8529ad6bb9"
   integrity sha512-7lX5bZFO3YG3AG0XVIm5L1SB6wDLtuaJksTkTWrux3/XwCZgw3MPWZBt3Jgj0w98uqUXWVypT2msxo0A1t22lw==
 
+"@types/lodash@^4.14.112":
+  version "4.14.149"
+  resolved "https://registry.yarnpkg.com/@types/lodash/-/lodash-4.14.149.tgz#1342d63d948c6062838fbf961012f74d4e638440"
+  integrity sha512-ijGqzZt/b7BfzcK9vTrS6MFljQRPn5BFWOx8oE0GYxribu6uV+aA9zZuXI1zc/etK9E8nrgdoF2+LgUw7+9tJQ==
+
 "@types/mocha@~2.2.47":
   version "2.2.48"
   resolved "https://registry.yarnpkg.com/@types/mocha/-/mocha-2.2.48.tgz#3523b126a0b049482e1c3c11877460f76622ffab"
@@ -3222,10 +3227,10 @@ element-resize-detector@^1.1.15:
   dependencies:
     batch-processor "^1.0.0"
 
-element-ui@^2.8.2:
-  version "2.12.0"
-  resolved "https://registry.yarnpkg.com/element-ui/-/element-ui-2.12.0.tgz#a893bc11ae4f7dbb7e9d541606f23e643f131ee4"
-  integrity sha512-DapyT0PW4i/1ETPHk8K8Qbe8B6hj10+dXsRTrOTFryV9wAs6e9mCxbV65awokyR2/v/KuIHJmqX+mH3wUa4rOQ==
+element-ui@^2.13.0:
+  version "2.13.0"
+  resolved "https://registry.yarnpkg.com/element-ui/-/element-ui-2.13.0.tgz#f6bb04e5b0a76ea5f62466044b774407ba4ebd2d"
+  integrity sha512-KYsHWsBXYbLELS8cdfvgJTOMSUby3UEjvsPV1V1VmgJ/DdkOAS4z3MiOrPxrT9w2Cc5lZ4eVSQiGhYFR5NVChw==
   dependencies:
     async-validator "~1.8.1"
     babel-helper-vue-jsx-merge-props "^2.0.0"
@@ -5352,9 +5357,10 @@ jsesc@~0.5.0:
   resolved "https://registry.yarnpkg.com/jsesc/-/jsesc-0.5.0.tgz#e7dee66e35d6fc16f710fe91d5cf69f70f08911d"
   integrity sha1-597mbjXW/Bb3EP6R1c9p9w8IkR0=
 
-"jsfeat@git+https://github.com/inspirit/jsfeat.git":
+"jsfeat@git+https://github.com/inspirit/jsfeat":
   version "0.0.8"
-  resolved "git+https://github.com/inspirit/jsfeat.git#4c7b336bbeeb26e6cd4cdf3c7d414abe273846f3"
+  uid "4c7b336bbeeb26e6cd4cdf3c7d414abe273846f3"
+  resolved "git+https://github.com/inspirit/jsfeat#4c7b336bbeeb26e6cd4cdf3c7d414abe273846f3"
 
 json-loader@^0.5.4, json-loader@~0.5.7:
   version "0.5.7"
@@ -6062,10 +6068,15 @@ minimist@0.0.8:
   resolved "https://registry.yarnpkg.com/minimist/-/minimist-0.0.8.tgz#857fcabfc3397d2625b8228262e86aa7a011b05d"
   integrity sha1-hX/Kv8M5fSYluCKCYuhqp6ARsF0=
 
-minimist@1.2.0, minimist@^1.1.0, minimist@^1.1.3, minimist@^1.2.0, minimist@~1.2.0:
+minimist@1.2.0:
   version "1.2.0"
   resolved "https://registry.yarnpkg.com/minimist/-/minimist-1.2.0.tgz#a35008b20f41383eec1fb914f4cd5df79a264284"
   integrity sha1-o1AIsg9BOD7sH7kU9M1d95omQoQ=
+
+minimist@^1.1.0, minimist@^1.1.3, minimist@^1.2.0, minimist@~1.2.3:
+  version "1.2.3"
+  resolved "https://registry.yarnpkg.com/minimist/-/minimist-1.2.3.tgz#3db5c0765545ab8637be71f333a104a965a9ca3f"
+  integrity sha512-+bMdgqjMN/Z77a6NlY/I3U5LlRDbnmaAk6lDveAPKwSpcPM4tKAuYsvYF8xjhOPXhOYGe/73vVLVez5PW+jqhw==
 
 minimist@~0.0.1:
   version "0.0.10"
